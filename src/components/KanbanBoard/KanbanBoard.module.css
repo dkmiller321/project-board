@@ -1,0 +1,212 @@
+.board {
+  display: flex;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  height: 100%;
+  overflow-x: auto;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  min-width: 280px;
+  max-width: 320px;
+  flex: 1;
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.columnHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.columnTitle {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.columnCount {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  background-color: var(--color-bg-tertiary);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+}
+
+.columnContent {
+  flex: 1;
+  padding: var(--space-sm);
+  overflow-y: auto;
+  min-height: 100px;
+  transition: background-color var(--transition-fast);
+}
+
+.columnOver {
+  background-color: var(--color-accent-muted);
+}
+
+.emptyColumn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+  margin: var(--space-sm);
+}
+
+.columnFooter {
+  padding: var(--space-sm) var(--space-md);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.addCardTrigger {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.addCardTrigger:hover {
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+}
+
+.addCardForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.addCardInput {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+}
+
+.addCardInput:focus {
+  border-color: var(--color-accent);
+}
+
+.addCardInput::placeholder {
+  color: var(--color-text-muted);
+}
+
+.addCardActions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.addCardBtn {
+  padding: var(--space-xs) var(--space-md);
+  background-color: var(--color-accent);
+  color: var(--color-bg-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+}
+
+.addCardBtn:hover {
+  background-color: var(--color-accent-hover);
+}
+
+.cancelBtn {
+  padding: var(--space-xs) var(--space-md);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.cancelBtn:hover {
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+}
+
+/* Card styles */
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md);
+  margin: var(--space-sm);
+  background-color: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: grab;
+  transition: all var(--transition-fast);
+}
+
+.card:hover {
+  border-color: var(--color-accent);
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+.cardDragging {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border-color: var(--color-accent);
+}
+
+.cardTitle {
+  flex: 1;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardInput {
+  flex: 1;
+  padding: var(--space-xs);
+  background-color: var(--color-bg-elevated);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+}
+
+.cardDelete {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  font-size: 16px;
+  border-radius: var(--radius-sm);
+  opacity: 0;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+  margin-left: var(--space-sm);
+}
+
+.card:hover .cardDelete {
+  opacity: 1;
+}
+
+.cardDelete:hover {
+  color: var(--color-danger);
+  background-color: rgba(196, 92, 92, 0.1);
+}
