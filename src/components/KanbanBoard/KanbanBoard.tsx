@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
   DndContext,
   DragOverlay,
@@ -34,24 +34,41 @@ export function KanbanBoard() {
     })
   );
 
-  const findColumnForCard = (cardId: string): ColumnId | null => {
-    for (const colId of COLUMN_IDS) {
-      if (state.columns[colId].cardIds.includes(cardId)) {
-        return colId;
+  // Group cards by column
+  const cardsByColumn = useMemo(() => {
+    const grouped: Record<ColumnId, TaskCard[]> = {
+      todo: [],
+      progress: [],
+      complete: [],
+    };
+
+    state.cards.forEach((card) => {
+      if (card.column_id in grouped) {
+        grouped[card.column_id].push(card);
       }
-    }
-    return null;
+    });
+
+    // Sort each column by position
+    COLUMN_IDS.forEach((colId) => {
+      grouped[colId].sort((a, b) => a.position - b.position);
+    });
+
+    return grouped;
+  }, [state.cards]);
+
+  const findColumnForCard = (cardId: string): ColumnId | null => {
+    const card = state.cards.find((c) => c.id === cardId);
+    return card ? card.column_id : null;
   };
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
     const cardId = active.id as string;
-    const card = state.cards[cardId];
-    const columnId = findColumnForCard(cardId);
+    const card = state.cards.find((c) => c.id === cardId);
 
-    if (card && columnId) {
+    if (card) {
       setActiveCard(card);
-      setActiveColumnId(columnId);
+      setActiveColumnId(card.column_id);
     }
   };
 
@@ -73,17 +90,11 @@ export function KanbanBoard() {
 
     if (!overColumn || activeColumn === overColumn) return;
 
-    const activeCards = [...state.columns[activeColumn].cardIds];
-    const overCards = [...state.columns[overColumn].cardIds];
+    const overColumnCards = cardsByColumn[overColumn];
+    let newIndex = overColumnCards.length;
 
-    const activeIndex = activeCards.indexOf(activeId);
-    if (activeIndex === -1) return;
-
-    activeCards.splice(activeIndex, 1);
-
-    let newIndex = overCards.length;
     if (!COLUMN_IDS.includes(overId as ColumnId)) {
-      const overIndex = overCards.indexOf(overId);
+      const overIndex = overColumnCards.findIndex((c) => c.id === overId);
       if (overIndex !== -1) {
         newIndex = overIndex;
       }
@@ -112,7 +123,8 @@ export function KanbanBoard() {
     }
 
     const currentColumn = activeColumnId;
-    const cardIds = [...state.columns[currentColumn].cardIds];
+    const columnCards = cardsByColumn[currentColumn];
+    const cardIds = columnCards.map((c) => c.id);
 
     const activeIndex = cardIds.indexOf(activeId);
     const overIndex = cardIds.indexOf(overId);
@@ -126,6 +138,14 @@ export function KanbanBoard() {
     setActiveColumnId(null);
   };
 
+  if (state.loading) {
+    return (
+      <div className={styles.board}>
+        <div className={styles.loading}>Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.board}>
       <DndContext
@@ -136,11 +156,15 @@ export function KanbanBoard() {
         onDragEnd={handleDragEnd}
       >
         {COLUMN_IDS.map((columnId) => (
-          <Column key={columnId} columnId={columnId} />
+          <Column
+            key={columnId}
+            columnId={columnId}
+            cards={cardsByColumn[columnId]}
+          />
         ))}
         <DragOverlay>
           {activeCard && activeColumnId ? (
-            <Card card={activeCard} columnId={activeColumnId} isDragOverlay />
+            <Card card={activeCard} isDragOverlay />
           ) : null}
         </DragOverlay>
       </DndContext>

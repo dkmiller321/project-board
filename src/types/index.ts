@@ -1,14 +1,25 @@
 export interface TaskCard {
   id: string;
+  user_id: string;
   title: string;
   description?: string;
-  createdAt: number;
+  column_id: ColumnId;
+  position: number;
+  created_at: string;
 }
 
 export interface TodoItem {
   id: string;
+  user_id: string;
   text: string;
   completed: boolean;
+  created_at: string;
+}
+
+export interface Note {
+  user_id: string;
+  content: string;
+  updated_at: string;
 }
 
 export type ColumnId = 'todo' | 'progress' | 'complete';
@@ -18,10 +29,10 @@ export interface Column {
 }
 
 export interface AppState {
-  cards: Record<string, TaskCard>;
-  columns: Record<ColumnId, Column>;
+  cards: TaskCard[];
   todos: TodoItem[];
   notes: string;
+  loading: boolean;
 }
 
 export type AppAction =

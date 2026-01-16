@@ -2,17 +2,16 @@ import { useState, useRef, useEffect } from 'react';
 import type { KeyboardEvent } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import type { TaskCard, ColumnId } from '../../types';
+import type { TaskCard } from '../../types';
 import { useApp } from '../../context/AppContext';
 import styles from './KanbanBoard.module.css';
 
 interface CardProps {
   card: TaskCard;
-  columnId: ColumnId;
   isDragOverlay?: boolean;
 }
 
-export function Card({ card, columnId, isDragOverlay }: CardProps) {
+export function Card({ card, isDragOverlay }: CardProps) {
   const { actions } = useApp();
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(card.title);
@@ -30,7 +29,7 @@ export function Card({ card, columnId, isDragOverlay }: CardProps) {
     data: {
       type: 'card',
       card,
-      columnId,
+      columnId: card.column_id,
     },
   });
 
@@ -68,7 +67,7 @@ export function Card({ card, columnId, isDragOverlay }: CardProps) {
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    actions.deleteCard(card.id, columnId);
+    actions.deleteCard(card.id);
   };
 
   if (isDragOverlay) {

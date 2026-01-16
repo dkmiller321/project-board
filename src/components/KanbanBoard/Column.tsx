@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { KeyboardEvent } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import type { ColumnId } from '../../types';
+import type { ColumnId, TaskCard } from '../../types';
 import { COLUMN_TITLES } from '../../types';
 import { useApp } from '../../context/AppContext';
 import { Card } from './Card';
@@ -10,15 +10,13 @@ import styles from './KanbanBoard.module.css';
 
 interface ColumnProps {
   columnId: ColumnId;
+  cards: TaskCard[];
 }
 
-export function Column({ columnId }: ColumnProps) {
-  const { state, actions } = useApp();
+export function Column({ columnId, cards }: ColumnProps) {
+  const { actions } = useApp();
   const [newCardTitle, setNewCardTitle] = useState('');
   const [isAdding, setIsAdding] = useState(false);
-
-  const column = state.columns[columnId];
-  const cards = column.cardIds.map((id) => state.cards[id]).filter(Boolean);
 
   const { setNodeRef, isOver } = useDroppable({
     id: columnId,
@@ -46,6 +44,8 @@ export function Column({ columnId }: ColumnProps) {
     }
   };
 
+  const cardIds = cards.map((c) => c.id);
+
   return (
     <div className={styles.column}>
       <div className={styles.columnHeader}>
@@ -56,9 +56,9 @@ export function Column({ columnId }: ColumnProps) {
         ref={setNodeRef}
         className={`${styles.columnContent} ${isOver ? styles.columnOver : ''}`}
       >
-        <SortableContext items={column.cardIds} strategy={verticalListSortingStrategy}>
+        <SortableContext items={cardIds} strategy={verticalListSortingStrategy}>
           {cards.map((card) => (
-            <Card key={card.id} card={card} columnId={columnId} />
+            <Card key={card.id} card={card} />
           ))}
         </SortableContext>
         {cards.length === 0 && !isAdding && (
