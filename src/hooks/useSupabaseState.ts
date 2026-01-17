@@ -59,7 +59,7 @@ export function useSupabaseState() {
           .select('*')
           .eq('user_id', user.id)
           .order('created_at', { ascending: true }),
-        supabase.from('notes').select('*').eq('user_id', user.id).single(),
+        supabase.from('notes').select('*').eq('user_id', user.id).maybeSingle(),
       ]);
 
       if (cardsResult.data) {
