@@ -5,6 +5,7 @@ import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import type { ColumnId, TaskCard } from '../../types';
 import { COLUMN_TITLES } from '../../types';
 import { useApp } from '../../context/AppContext';
+import { useSubscription } from '../../context/SubscriptionContext';
 import { Card } from './Card';
 import styles from './KanbanBoard.module.css';
 
@@ -15,6 +16,7 @@ interface ColumnProps {
 
 export function Column({ columnId, cards }: ColumnProps) {
   const { actions } = useApp();
+  const { canAddCard } = useSubscription();
   const [newCardTitle, setNewCardTitle] = useState('');
   const [isAdding, setIsAdding] = useState(false);
 
@@ -97,10 +99,15 @@ export function Column({ columnId, cards }: ColumnProps) {
               </button>
             </div>
           </div>
-        ) : (
+        ) : canAddCard ? (
           <button onClick={() => setIsAdding(true)} className={styles.addCardTrigger}>
             + Add card
           </button>
+        ) : (
+          <div className={styles.limitReached}>
+            <span className={styles.limitText}>Card limit reached</span>
+            <span className={styles.limitSubtext}>Upgrade to Pro for unlimited cards</span>
+          </div>
         )}
       </div>
     </div>

@@ -81,6 +81,141 @@ export interface Database {
         }
         Relationships: []
       }
+      customers: {
+        Row: {
+          id: string
+          stripe_customer_id: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          stripe_customer_id: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          stripe_customer_id?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          id: string
+          active: boolean
+          name: string
+          description: string | null
+          metadata: Json
+          created_at: string
+        }
+        Insert: {
+          id: string
+          active?: boolean
+          name: string
+          description?: string | null
+          metadata?: Json
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          active?: boolean
+          name?: string
+          description?: string | null
+          metadata?: Json
+          created_at?: string
+        }
+        Relationships: []
+      }
+      prices: {
+        Row: {
+          id: string
+          product_id: string
+          active: boolean
+          currency: string
+          unit_amount: number | null
+          type: 'one_time' | 'recurring'
+          interval: 'month' | 'year' | null
+          interval_count: number | null
+          created_at: string
+        }
+        Insert: {
+          id: string
+          product_id: string
+          active?: boolean
+          currency: string
+          unit_amount?: number | null
+          type: 'one_time' | 'recurring'
+          interval?: 'month' | 'year' | null
+          interval_count?: number | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          product_id?: string
+          active?: boolean
+          currency?: string
+          unit_amount?: number | null
+          type?: 'one_time' | 'recurring'
+          interval?: 'month' | 'year' | null
+          interval_count?: number | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          id: string
+          user_id: string
+          status: 'trialing' | 'active' | 'canceled' | 'past_due' | 'unpaid'
+          price_id: string
+          cancel_at_period_end: boolean
+          current_period_start: string
+          current_period_end: string
+          created_at: string
+        }
+        Insert: {
+          id: string
+          user_id: string
+          status: 'trialing' | 'active' | 'canceled' | 'past_due' | 'unpaid'
+          price_id: string
+          cancel_at_period_end?: boolean
+          current_period_start: string
+          current_period_end: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          status?: 'trialing' | 'active' | 'canceled' | 'past_due' | 'unpaid'
+          price_id?: string
+          cancel_at_period_end?: boolean
+          current_period_start?: string
+          current_period_end?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      usage: {
+        Row: {
+          user_id: string
+          cards_count: number
+          updated_at: string
+        }
+        Insert: {
+          user_id: string
+          cards_count?: number
+          updated_at?: string
+        }
+        Update: {
+          user_id?: string
+          cards_count?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -109,3 +244,23 @@ export type TodoUpdate = Database['public']['Tables']['todos']['Update']
 export type NoteRow = Database['public']['Tables']['notes']['Row']
 export type NoteInsert = Database['public']['Tables']['notes']['Insert']
 export type NoteUpdate = Database['public']['Tables']['notes']['Update']
+
+export type CustomerRow = Database['public']['Tables']['customers']['Row']
+export type CustomerInsert = Database['public']['Tables']['customers']['Insert']
+export type CustomerUpdate = Database['public']['Tables']['customers']['Update']
+
+export type ProductRow = Database['public']['Tables']['products']['Row']
+export type ProductInsert = Database['public']['Tables']['products']['Insert']
+export type ProductUpdate = Database['public']['Tables']['products']['Update']
+
+export type PriceRow = Database['public']['Tables']['prices']['Row']
+export type PriceInsert = Database['public']['Tables']['prices']['Insert']
+export type PriceUpdate = Database['public']['Tables']['prices']['Update']
+
+export type SubscriptionRow = Database['public']['Tables']['subscriptions']['Row']
+export type SubscriptionInsert = Database['public']['Tables']['subscriptions']['Insert']
+export type SubscriptionUpdate = Database['public']['Tables']['subscriptions']['Update']
+
+export type UsageRow = Database['public']['Tables']['usage']['Row']
+export type UsageInsert = Database['public']['Tables']['usage']['Insert']
+export type UsageUpdate = Database['public']['Tables']['usage']['Update']
